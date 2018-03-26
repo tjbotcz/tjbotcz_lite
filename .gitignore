@@ -1,0 +1,15 @@
+# config file
+config.js
+
+# Dependency directories
+node_modules/
+lib/
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
+
+*.jpg
+*.log
