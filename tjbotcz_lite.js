@@ -214,7 +214,7 @@ function processAction(cmd, payload) {
       break;
     case "take_a_photo":
       take_a_photo().then(function(){
-        tj.speak("I am done. You can classify objects, detect faces or find a text now.");
+        tj.speak("I am done. You can classify objects, or find a text now.");
       });
       break;
     case "classify_photo":
@@ -222,15 +222,6 @@ function processAction(cmd, payload) {
       break;
     case "read_text":
       read_text();
-      break;
-    case "detect_faces":
-      detect_faces();
-      break;
-    case "photo_and_detect_faces":
-      take_a_photo().then(function(){
-        //this must be called in this way otherwise it takes a previous picture
-        detect_faces();
-      });
       break;
     case "listen":
       listen();
