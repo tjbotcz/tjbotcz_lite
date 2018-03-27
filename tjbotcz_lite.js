@@ -313,7 +313,7 @@ function changeColorRGBLed(color, callback) {
     changeColorRGBLed(color, function(color){});
     break;
    default:
-    console.log("Unknowen color.");
+    console.log("Unknown color.");
     callback(null);
   }
   callback(color);
