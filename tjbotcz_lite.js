@@ -367,7 +367,6 @@ console.log("CMD: " + position);
      break;
    case "wave":
      tj.wave();
-     position = "raised";
      break;
    default:
      tj.speak("I'm not able to set my arm into this position.");
