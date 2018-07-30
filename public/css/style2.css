@@ -1,0 +1,124 @@
+/*
+  inspired by: http://nicolasgallagher.com/pure-css-speech-bubbles/demo/default.css
+  date: 11.09.2017
+*/
+html {
+  background-color: #ECE8E8;
+  font-family: "Helvetica Neue", Helvetica;
+}
+
+.header {
+  position: relative;
+  top: -10px;
+  width: 100%;
+  margin-bottom: -6%;
+}
+
+.header img{
+  width: 50%;
+  height: auto;
+}
+
+
+.container {
+  position: relative;
+  background-color: #ffffff;
+  margin: 0 auto;
+  max-width: 1280px;
+  width: 40%;
+  height: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+footer {
+  display: block;
+  position: fixed;
+  bottom: 7.5px;
+  left: 12px;
+}
+.watson img{
+  height: auto;
+  width: 100%;
+}
+.watson {
+  height:auto;
+  width: 45px;
+  box-shadow: 0 1px 3px #ffffff;
+  border: 2px solid #ffffff;
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+  padding: 6px;
+}
+
+.watson:hover{
+  border: 2px solid rgba(255, 255, 255, 1);
+  box-shadow: 0 1px 3px;
+  cursor: pointer;
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+}
+
+.watson .tooltiptext {
+  visibility: hidden;
+  width: 500%;
+  background-color:rgba(81, 81, 81, 1) ;
+  color: #fff;
+  border-radius: 6px;
+  padding-left: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -40px;
+  margin-bottom: 10px;
+}
+
+.watson:hover .tooltiptext {
+    visibility: visible;
+}
+
+i.material-icons {
+  color: rgba(255, 255, 255, 1);
+  display: inline-block;
+  position: fixed;
+  left: 85px;
+  bottom: 8px;
+  box-shadow: 0 1px 3px;
+  border: 2px solid rgba(255, 255, 255, 1);
+  border-radius:50%;
+  -moz-border-radius:50%;
+  -webkit-border-radius:50%;
+  padding: 10px;
+}
+
+i.material-icons:hover{
+  color: rgba(81, 81, 81, 1);
+  cursor: pointer;
+}
+
+i.material-icons .tooltiptext {
+  visibility: hidden;
+  width: 500%;
+  background-color:rgba(81, 81, 81, 1) ;
+  color: #fff;
+  border-radius: 6px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -40px;
+  margin-bottom: 10px;
+}
+
+i.material-icons:hover .tooltiptext {
+    visibility: visible;
+    font-size: 16px;
+    font-family: "Helvetica Neue", Helvetica;
+}
