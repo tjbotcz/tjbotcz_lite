@@ -1,9 +1,9 @@
 # config file
-config.js
+configuration/config.js
+configuration/credentialsgit .js
 
 # Dependency directories
 node_modules/
-lib/
 
 # Optional npm cache directory
 .npm
