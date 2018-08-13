@@ -1,7 +1,7 @@
 //TJBot libs
-var TJBot = require("tjbot");
-var conf = require("./config"); //tjConfig & local czech enhancements
-var confCred = require("./credentials"); //credentials only
+var TJBot = require("tjbotczlib");
+var conf = require("./configuration/config"); //tjConfig & local czech enhancements
+var confCred = require("./configuration/credentials"); //credentials only
 var fs = require("fs"); //filesystem
 
 //Pigpio library for LED (simple version)
@@ -13,72 +13,18 @@ var pinG = new gpio(conf.ledpins.G, { mode: gpio.OUTPUT });
 var pinB = new gpio(conf.ledpins.B, { mode: gpio.OUTPUT });
 var _RGBLed = { pinR, pinG, pinB };
 
-//REST API
-var express = require('express');
-var bodyParser = require('body-parser');
-
 //TJBot - Watson services
 //---------------------------------------------------------------------
 var credentials = confCred.credentials;
-var hardware = ['microphone', 'speaker', 'servo', 'camera']; //simple 'rgb_led' as part of this file
+var hardware = ['microphone', 'speaker', 'servo', 'camera', 'rgb_led']; 
 var tjConfig = conf.tjConfig;
 var _paths = conf.paths;
 
 var tj = new TJBot(hardware, tjConfig, credentials);
 
-
-//REST API & chat client
-//---------------------------------------------------------------------
-function initRestAPI() {
-  var restAPI = express();
-  restAPI.use(bodyParser.urlencoded({ extended: true }));
-  restAPI.use(bodyParser.json());
-
-  var port = 80;
-  var router = express.Router();
-
-  router.get('/', function (req, res) {
-    res.json({ message: 'Hello, this is TJBot\'s REST API!' });
-  });
-
-  router.route('/converse')
-    .get(function (req, res) {
-      res.json({ "error": 'Use [POST] instead!' });
-    })
-    .post(function (req, res) {
-      if (req.body.message) {
-        console.log("[REST API] message: " + req.body.message);
-
-        processConversation(req.body.message, function (response) {
-          res.json({ message: response.description });
-
-          //read response text from the service
-          // if(response.description){
-          //   tj.speak(response.description).then(function(){
-          //     if (response.object.context.hasOwnProperty('action')){
-          //       var cmdType = response.object.context.action.cmdType;
-          //       var cmdPayload;
-          //       if (response.object.context.action.hasOwnProperty('cmdPayload')) {
-          //         cmdPayload = response.object.context.action.cmdPayload;
-          //       }
-          //       processAction(cmdType, cmdPayload);
-          //     }
-          //   });
-          // }
-        });
-      } else {
-        var err = "[REST API] 'message' block is missing in the POST payload";
-        console.error(err);
-        res.json({ "error": err });
-      }
-    });
-
-  restAPI.use('/rest', router);
-  restAPI.use(express.static(__dirname + '/public'));
-
-  restAPI.listen(port);
-  console.log('RestAPI is active on port ' + port);
-}
+//Context object
+var contextBackup; // last conversation context backup
+var ctx = {}; // our internal context object
 
 //---------------------------------------------------------------------
 // Functions
@@ -142,21 +88,6 @@ function photoClassificationToText(objects, callback) {
   callback(text);
 }
 
-/**
- * READ TEXT
- */
-function read_text() {
-  tj.recognizeTextInPhoto(_paths.picture.orig).then(function (texts) {
-    console.log(JSON.stringify(texts, null, 2));
-
-    if (texts.images[0].hasOwnProperty('text') && texts.images[0].text !== "") {
-      tj.speak("I think I can see following words: " + texts.images[0].text);
-    } else {
-      tj.speak("I can't see any text.");
-    }
-  });
-}
-
 //CONVERSATION
 //---------------------------------------------------------------------
 
@@ -192,16 +123,31 @@ function listen() {
 }
 
 /**
+ * Stop listening
+ */
+function stopListening() {
+  tj.stopListening();
+
+  var msg = "Listening was stopped.";
+  tj.speak(msg);
+  console.log(msg);
+}
+
+/**
  * PROCESS CONVERSATION
  * @param inTextMessage - text
  */
 function processConversation(inTextMessage, callback) {
+  if(contextBackup == null) contextBackup = ctx;
+  if(contextBackup.hasOwnProperty('action')) delete contextBackup.action;
+  // Object.assign(contextBackup, ctx);
+
   // send to the conversation service
-  tj.converse(confCred.conversationWorkspaceId, inTextMessage, function (response) {
+  tj.converse(confCred.conversationWorkspaceId, inTextMessage, contextBackup, function (response) {
     console.log(JSON.stringify(response, null, 2));
+    contextBackup = response.object.context;
     callback(response);
   });
-
 }
 
 
@@ -214,14 +160,15 @@ function processAction(cmd, payload) {
       break;
     case "take_a_photo":
       take_a_photo().then(function () {
-        tj.speak("I am done. You can classify objects, or find a text now.");
+        tj.speak("I am done. You can classify objects now.");
       });
       break;
     case "classify_photo":
       classify_photo();
       break;
     case "read_text":
-      read_text();
+      //read_text();
+      tj.speak("Unfortunately, the text recognition is not supported. You can classify objects now.");
       break;
     case "listen":
       listen();
@@ -246,104 +193,33 @@ function processAction(cmd, payload) {
   }
 }
 
-function stopListening() {
-  tj.stopListening();
-
-  var msg = "Listening was stopped.";
-  tj.speak(msg);
-  console.log(msg);
-}
 
 //LED
 //---------------------------------------------------------------------
 
-//helper
-function led_turn_on(led) {
-  led.digitalWrite(1);
-}
-//helper
-function led_turn_off(led) {
-  led.digitalWrite(0);
-}
-/**
- * helper which can change the color of the RGB led.
- *
- * @param {String} color The color to use. Must be from list of _basic_colors.
-*/
-function changeColorRGBLed(color, callback) {
-  switch (color) {
-    case "red":
-      led_turn_on(_RGBLed.pinR);
-      led_turn_off(_RGBLed.pinG);
-      led_turn_off(_RGBLed.pinB);
-      break;
-    case "green":
-      led_turn_off(_RGBLed.pinR);
-      led_turn_on(_RGBLed.pinG);
-      led_turn_off(_RGBLed.pinB);
-      break;
-    case "blue":
-      led_turn_off(_RGBLed.pinR);
-      led_turn_off(_RGBLed.pinG);
-      led_turn_on(_RGBLed.pinB);
-      break;
-    case "yellow":
-      led_turn_on(_RGBLed.pinR);
-      led_turn_on(_RGBLed.pinG);
-      led_turn_off(_RGBLed.pinB);
-      break;
-    case "magenta":
-      led_turn_on(_RGBLed.pinR);
-      led_turn_off(_RGBLed.pinG);
-      led_turn_on(_RGBLed.pinB);
-      break;
-    case "cyan":
-      led_turn_off(_RGBLed.pinR);
-      led_turn_on(_RGBLed.pinG);
-      led_turn_on(_RGBLed.pinB);
-      break;
-    case "white":
-      led_turn_on(_RGBLed.pinR);
-      led_turn_on(_RGBLed.pinG);
-      led_turn_on(_RGBLed.pinB);
-      break;
-    case "random":
-      var randIdx = Math.floor(Math.random() * _basic_colors.length);
-      color = _basic_colors[randIdx];
-      changeColorRGBLed(color, function (color) { });
-      break;
-    default:
-      console.log("Unknown color.");
-      callback(null);
-  }
-  callback(color);
-}
-
-//Turns off all the RGB LED colors
+//Turns off all the LED colors
 //---------------------------------------------------------------------
 function led_turn_off_all() {
-  led_turn_off(_RGBLed.pinR);
-  led_turn_off(_RGBLed.pinG);
-  led_turn_off(_RGBLed.pinB);
+  tj.turnOffRGBLed();
 }
 
-//Turns on all the RGB LED on random color
+//Turns on all the LED on random color
 //---------------------------------------------------------------------
 function led_turn_on_all() {
-  changeColorRGBLed("random", function (ret_color) {
-    if (ret_color) {
+  tj.turnOnRGBLed(function(ret_color){
+    if(ret_color){
       console.log("Color is: " + ret_color);
-    } else {
-      console.log("Color did not set.");
+    } else{
+      console.log("LED did not turn on.");
     }
   });
 }
 
-//Changes the color of the RGB LED
+//Changes the color of th RGB diode
 //---------------------------------------------------------------------
-function led_change_color(color) {
-  changeColorRGBLed(color, function (ret_color) {
-    if (ret_color) {
+function led_change_color(color){
+  tj.changeColorRGBLed(color, function(ret_color){
+    if(ret_color) {
       console.log("Color is: " + ret_color);
     } else {
       console.log("Color did not set.");
@@ -354,7 +230,6 @@ function led_change_color(color) {
 //ARM
 //---------------------------------------------------------------------
 function wave_arm(position) {
-  console.log("CMD: " + position);
   switch (position) {
     case "back":
       tj.armBack();
@@ -387,4 +262,3 @@ function resetTJBot() {
 //CALL INIT
 //---------------------------------------------------------------------
 resetTJBot();
-initRestAPI();

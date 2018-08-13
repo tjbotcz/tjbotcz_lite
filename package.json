@@ -7,22 +7,19 @@
     "email": "tjbotcz@gmail.com"
   },
   "dependencies": {
-    "tjbot": "latest",
-    "express": "~4.0.0",
-    "body-parser": "~1.0.1"
+    "tjbotczlib": "latest"
   },
   "main": "tjbotcz_lite.js",
   "homepage": "https://github.com/tjbotcz/tjbotcz_lite",
   "keywords": [
-    "tjbot"
+    "tjbotcz", "tjbot"
   ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git@github.com/tjbotcz/tjbotcz_lite.git"
+    "url": "https://github.com/tjbotcz/tjbotcz_lite.git"
   },
   "scripts": {
-    "start": "node tjbotcz_lite.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node tjbotcz_lite.js"
   }
 }
