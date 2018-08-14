@@ -6,7 +6,7 @@ exports.tjConfig = {
     },
     robot: {
         gender: 'male', // ['male', 'female']
-        name: 'Watson'
+        name: 'Michael'
     },
     listen: {
         microphoneDeviceId: "plughw:1,0", // plugged-in USB card 1, device 0; see `arecord -l` for a list of recording devices
