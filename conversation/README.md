@@ -1,2 +1,4 @@
-# Requirements
-You need to create a Conversation service with **Standard** pricing plan, since we use more than 25 intents. 
+# TJBotCZ conversation sample
+Here you will find conversation file, that needs to be imported to Watson Assisstant service (see manuals for more information). 
+
+The conversation works with LITE version of the service that is offered for free. 
