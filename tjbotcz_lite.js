@@ -140,6 +140,7 @@ function stopListening() {
 function processConversation(inTextMessage, callback) {
   if(contextBackup == null) contextBackup = ctx;
   if(contextBackup.hasOwnProperty('action')) delete contextBackup.action;
+  if(contextBackup.hasOwnProperty('yes_photo')) delete contextBackup.yes_photo;
   // Object.assign(contextBackup, ctx);
 
   // send to the conversation service
