@@ -36,7 +36,12 @@ exports.tjConfig = {
             verticalFlip: false, // flips the image vertically, may need to set to 'true' if the camera is installed upside-down
             horizontalFlip: false // flips the image horizontally, should not need to be overridden
         },
-        language: 'en'
+        language: 'en',
+        classifier_ids: ["default"] // specify your custom built classifier here or use prebuilt onces which are as follows: 
+                           // - "default": Returns classes from thousands of general tags.
+                           // - "food": Enhances specificity and accuracy for images of food items.
+                           // - "explicit": Evaluates whether the image might be pornographic.     
+                            
     }
 }
 
