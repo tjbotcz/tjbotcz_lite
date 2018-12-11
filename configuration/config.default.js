@@ -58,6 +58,6 @@ exports.paths = {
 		orig: __dirname + '/../public/img/picture.jpg'
 	},
 	music: {
-		take_a_picture: __dirname + '/../media/music/take_a_picture.wav'
+		take_a_picture: __dirname + '/../media/music/take_a_picture.mp3'
 	}
 }
