@@ -19,17 +19,23 @@ exports.credentials.assistant = {
 };
 
 // Watson Speech to Text
+//For older instances use password/usrername fields instead of iam_apikey
 // https://www.ibm.com/watson/services/speech-to-text
 exports.credentials.speech_to_text = {
-	password: '',
-	username: ''
+	//password: '',
+	//username: ''
+	iam_apikey: '',
+	url: ''
 };
 
 // Watson Text to Speech
+//For older instances use password/usrername fields instead of iam_apikey
 // https://www.ibm.com/watson/services/text-to-speech
 exports.credentials.text_to_speech = {
-	password: '',
-	username: ''
+	//password: '',
+	//username: ''
+	iam_apikey: '',
+	url: ''
 };
 
 // Watson Visual Recognition
