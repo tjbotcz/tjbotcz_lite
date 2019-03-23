@@ -14,8 +14,10 @@ exports.credentials = {};
 // Watson Assistant
 // https://www.ibm.com/watson/ai-assistant/
 exports.credentials.assistant = {
-	password: '',
-	username: ''
+	//password: '',
+	//username: ''
+	iam_apikey: '',
+	url: ''
 };
 
 // Watson Speech to Text
