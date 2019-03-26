@@ -4,11 +4,17 @@ var ip = require("ip");
 var espeak = require("espeak");
 var soundplayer = require("sound-player");
 var fs = require('fs');
+var LCD = require('lcdi2c');
 
-//get IP address as a string
-var ipina = ip.address();
-ipina = "My I P is.   " + ipina.toString();
+var lcd = new LCD( 1, 0x3F, 16, 2); //(bus, address, columns, rows)
 
+lcd.clear();
+    lcd.println( 'Welcome to TJBot', 1);
+    if (lcd.error) {
+      console.log( lcd.error );
+    } else {
+      lcd.println( 'Button gives IP.', 2);
+    };
 
 //setting up button on pin 13 + GND
 const button = new gpio(13, {
@@ -29,9 +35,22 @@ button.glitchFilter(10000);
 button.on('alert', function(level, tick) {
   if (level == 0) {
     console.log("Button Pressed")
-    console.log(ipina)
+    var myIP = ip.address();
+    if (myIP.toString() == '127.0.0.1'){
+      myIP = 'not available';
+    }
+    var ipina = "My I P is.   " + myIP.toString();
+    console.log("My IP address is: " + myIP);
+    lcd.clear();
+    lcd.println( 'IP Address:', 1);
+    if (lcd.error) {
+      console.log( lcd.error );
+    } else {
+      lcd.println( myIP, 2);
+    };
+    
 
-   
+ //   var promisetoplay = new Promise (function(resolve,reject) {
     espeak.speak(ipina, ['-s 122'], function(err, wav) {
       if (err) return console.error(err);
      
@@ -42,31 +61,42 @@ button.on('alert', function(level, tick) {
       let path = 'mojeipina.wav';
       fs.open(path, 'w', function(err,fd) {  
         if (err) {
-            throw 'could not open file: ' + err;
-          }
+          throw 'Could not open file: ' + err;
+        }
       
         fs.write(fd, buffer, 0, buffer.length, null, function(err) {
           if (err) throw 'error writing file: ' + err;
           fs.close(fd, function() {
-              console.log('Sound file created successfully.');
+            console.log('Sound file created successfully.');
           });
+        });
       });
-     });
       
-      // sound player playing the wav file created previously
-      var options = {
-      filename: "mojeipina.wav",
-      gain: 100,
-      debug: true,
-      player: "aplay",   
-      }
+      // configuration of the sound-player 
+        var options = {
+          filename: "mojeipina.wav",
+          gain: 100,
+          debug: true,
+          player: "aplay",   
+        }
+      // play the file
+        var myplayer = new soundplayer(options)
+        myplayer.play();
+      // on completion delete the sound file
+        myplayer.on('complete', function(){
+          console.log ("File was played.");
+          fs.unlink (path, function(err){
+          if (err) throw err;
+          console.log("File " + path + " was deleted.")
+          });
+        })
 
-      var myplayer = new soundplayer(options)
-      myplayer.play();
-
-    });
-
-    
+        myplayer.on('error', function(err) {
+          console.log (err);
+        })
+            
+      });
+ 
   }
 });
 
