@@ -5,6 +5,31 @@ var espeak = require("espeak");
 var soundplayer = require("sound-player");
 var fs = require('fs');
 var LCD = require('lcdi2c');
+var prun = require('is-running');
+
+
+const pathPID = './PID.txt'
+
+try{
+  if (fs.existsSync(pathPID)) {
+    console.log ('PID file exists.');
+    console.log(`This process is pid ${process.pid}`);
+    var contents = fs.readFileSync(pathPID, 'utf8');
+    if (prun(contents)) {
+      console.log('The application is already running.');
+      process.exit(1);
+    } else {
+      console.log('The PID does not exist.');
+      fs.writeFile(pathPID, process.pid, function(){console.log('PID file was updated with current PID: ' + contents)});
+    }
+  } else {
+    console.log ('No PID file found. Creating and populating with PID ' + process.pid + '...');
+    fs.writeFile(pathPID, process.pid, function(){console.log('done.')});
+  }
+} catch (err) {
+  console.log (err);
+}
+
 
 var lcd = new LCD( 1, 0x3F, 16, 2); //(bus, address, columns, rows)
 
@@ -99,4 +124,3 @@ button.on('alert', function(level, tick) {
  
   }
 });
-
