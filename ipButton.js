@@ -13,14 +13,14 @@ const pathPID = './PID.txt'
 try{
   if (fs.existsSync(pathPID)) {
     console.log ('PID file exists.');
-    console.log(`This process is pid ${process.pid}`);
+    console.log(`This process has pid ${process.pid}`);
     var contents = fs.readFileSync(pathPID, 'utf8');
     if (prun(contents)) {
-      console.log('The application is already running.');
+      console.log('The application is already running. Closing this duplicate process.');
       process.exit(1);
     } else {
-      console.log('The PID does not exist.');
-      fs.writeFile(pathPID, process.pid, function(){console.log('PID file was updated with current PID: ' + contents)});
+      console.log('The PID saved in file does not exist.');
+      fs.writeFile(pathPID, process.pid, function(){console.log('PID file was updated with current PID: ' + process.pid)});
     }
   } else {
     console.log ('No PID file found. Creating and populating with PID ' + process.pid + '...');
@@ -110,11 +110,14 @@ button.on('alert', function(level, tick) {
       // on completion delete the sound file
         myplayer.on('complete', function(){
           console.log ("File was played.");
-          fs.unlink (path, function(err){
-          if (err) throw err;
-          console.log("File " + path + " was deleted.")
-          });
-        })
+          lcd.clear();
+          lcd.println( 'Welcome to TJBot', 1);
+          if (lcd.error) {
+            console.log( lcd.error );
+          } else {
+            lcd.println( 'Button gives IP.', 2);
+          };
+        });
 
         myplayer.on('error', function(err) {
           console.log (err);
