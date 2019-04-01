@@ -6,7 +6,7 @@ var soundplayer = require("sound-player");
 var fs = require('fs');
 var LCD = require('lcdi2c');
 var prun = require('is-running');
-
+var i2c = require('i2c-bus');
 
 const pathPID = './PID.txt'
 
@@ -31,15 +31,22 @@ try{
 }
 
 
-var lcd = new LCD( 1, 0x3F, 16, 2); //(bus, address, columns, rows)
 
-lcd.clear();
-    lcd.println( 'Welcome to TJBot', 1);
+var lcd = new LCD( 1, 0x3F, 16, 2); //(bus, address, columns, rows)
+if (lcd.error) {
+  console.log('LCD not connected properly or at all');
+} else {
+  lcd.clear();
+  lcd.println( 'Welcome to TJBot', 1);
     if (lcd.error) {
       console.log( lcd.error );
     } else {
       lcd.println( 'Button gives IP.', 2);
     };
+}
+
+
+    
 
 //setting up button on pin 13 + GND
 const button = new gpio(13, {
@@ -66,14 +73,19 @@ button.on('alert', function(level, tick) {
     }
     var ipina = "My I P is.   " + myIP.toString();
     console.log("My IP address is: " + myIP);
-    lcd.clear();
-    lcd.println( 'IP Address:', 1);
     if (lcd.error) {
-      console.log( lcd.error );
+      console.log('LCD not connected properly or at all');
     } else {
-      lcd.println( myIP, 2);
+      lcd.clear();
+      lcd.println( 'IP Address:', 1);
+      if (lcd.error) {
+        console.log( lcd.error );
+      } else {
+        lcd.println( myIP, 2);
+      };
     };
     
+  
 
  //   var promisetoplay = new Promise (function(resolve,reject) {
     espeak.speak(ipina, ['-s 122'], function(err, wav) {
@@ -110,12 +122,16 @@ button.on('alert', function(level, tick) {
       // on completion delete the sound file
         myplayer.on('complete', function(){
           console.log ("File was played.");
-          lcd.clear();
-          lcd.println( 'Welcome to TJBot', 1);
           if (lcd.error) {
-            console.log( lcd.error );
+            console.log('LCD not connected properly or at all');
           } else {
-            lcd.println( 'Button gives IP.', 2);
+            lcd.clear();
+            lcd.println( 'Welcome to TJBot', 1);
+              if (lcd.error) {
+                console.log( lcd.error );
+              } else {
+                lcd.println( 'Button gives IP.', 2);
+              };
           };
         });
 
