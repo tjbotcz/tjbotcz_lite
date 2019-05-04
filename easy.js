@@ -1,5 +1,5 @@
 var fs = require("fs"); //filesystem
-var opn = require('opn');
+var opn = require('open');
 var express = require("express");
 var bodyParser = require("body-parser");
 const voices = {
