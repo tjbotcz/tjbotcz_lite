@@ -10,8 +10,10 @@
     "lcdi2c": "~1.0.6",
     "espeak": "~0.0.3",
     "ip": "~1.1.5",
+    "is-running": "~2.1.0",
     "body-parser": "~1.0.1",
     "express": "~4.0.0",
+    "open":"~6.2.0",
     "tjbotczlib": "latest"
   },
   "main": "tjbotcz_lite.js",
