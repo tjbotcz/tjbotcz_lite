@@ -1,5 +1,4 @@
 var fs = require("fs"); //filesystem
-var opn = require('open');
 var express = require("express");
 var bodyParser = require("body-parser");
 const voices = {
@@ -28,10 +27,10 @@ function initRestAPI() {
     router.get('/cred', function(request, response) {
       var stateMsg;
       if(x) {
-        stateMsg = "TJBot is ready."
+        stateMsg = "TJBot is ready.";
         response.send(stateMsg);  
       } else {
-        stateMsg = "Something went wrong."
+        stateMsg = "Something went wrong.";
         response.send(stateMsg);  
       } 
     });

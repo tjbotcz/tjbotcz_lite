@@ -1,19 +1,3 @@
-function processMsg(){
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-      if (this.status == 200) {
-        var myInput = document.querySelector(".msg");
-        var button = document.querySelector(".btn");
-        var msgVal = myInput.value;
-    }
-    var url = window.location.protocol+ "//" + window.location.host + "/rest/cred";
-    xhttp.open("POST", url, true);
-    xhttp.setRequestHeader("Content-Type", "application/json");
-    //xhttp.send(JSON.stringify({"message" : msgVal}));
-    xhttp.send(JSON.stringify({"message" : msgVal}));
-  }
-}
-
 let genderBtn = document.querySelector(".gender-btn");
 let speakLanguage =  document.querySelector(".speak");
 let toggleBtns =  document.querySelectorAll(".on-off");
@@ -22,7 +6,9 @@ let frInput = document.querySelector(".fr");
 let hiddenBtn = document.querySelector(".hidden-btn");
 let submitBtn = document.querySelector(".sub");
 let successMsg  = document.querySelector(".success");
+let failMsg  = document.querySelector(".fail");
 let counter = 0;
+let counterFail = 0;
 
 function showOrHiddeSuccessMsg(counter) {
   if(counter % 2 == 0) {
@@ -32,6 +18,22 @@ function showOrHiddeSuccessMsg(counter) {
   } else {
     successMsg.style.opacity = 1;
     successMsg.zIndex = 1000;
+    failMsg.style.opacity = 0;
+    failMsg.zIndex = -1;
+    document.querySelector(".main-content").style.zIndex="-1";
+  }
+}
+
+function showOrHiddeFailMsg(counterFail) {
+  if(counterFail % 2 == 0) {
+    failMsg.style.opacity = 0;
+    failMsg.zIndex = -1;
+    document.querySelector(".main-content").style.zIndex="1000";
+  } else {
+    failMsg.style.opacity = 1;
+    failMsg.zIndex = 1000;
+    successMsg.style.opacity = 0;
+    successMsg.zIndex = -1;
     document.querySelector(".main-content").style.zIndex="-1";
   }
 }
@@ -124,6 +126,9 @@ submitBtn.onclick = () => {
         if (responseMsg == "TJBot is ready."){
           counter++ ;
           showOrHiddeSuccessMsg(counter);
+        } else if (responseMsg == "Something went wrong."){
+          counterFail++ ;
+          showOrHiddeFailMsg(counterFail);
         }
       }
     }
@@ -135,6 +140,11 @@ submitBtn.onclick = () => {
 successMsg.onclick = () => {
   counter++;
   showOrHiddeSuccessMsg(counter);
+}
+
+failMsg.onclick = () => {
+  counterFail++;
+  showOrHiddeFailMsg(counterFail);
 }
 
 
