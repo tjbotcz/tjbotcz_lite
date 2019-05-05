@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Test</title>
+    <title>TJBot CZ Config</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="./style.css" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -13,7 +13,7 @@
     <div class="success">
         <h1>YOUR TJBOT IS READY TO BE USED!</h1>
         <p>Get back to the commandline and use <code>Ctrl + C</code> to quit the setup mode</p>
-        <p>Then Run <code>sude node tjbotcz_lite.js</code></p>
+        <p>Then Run <code style="text-transform: lowercase;">sudo node tjbotcz_lite.js</code></p>
         <img src="./img/tjbot_illustrated.png" alt="tjbot">
     </div>
     <div class="main-content">
@@ -22,7 +22,8 @@
                     <img src="./img/tjbot.png" alt="tjbot">
                 </div>
                 <div class="form-area">
-                        <form method="post" action="/rest/cred">
+                        <iframe name="hiddenFrame" width="0" height="0" style="display: block; border: none;"></iframe>
+                        <form method="post" action="/rest/cred" target="hiddenFrame">
                             <div class="config">
                                 <label>TJBotcz Name</label>
                                 <input type="text" name="tjname" placeholder="TJBot Name" required>
@@ -113,6 +114,8 @@
                                         </div>
                                     </div>
                                 </div>
+                                <br>
+                                <br>
                                 <label>Gender</label>
                                 
                                 <div class="slider-area gender">
@@ -151,6 +154,7 @@
                                 <br>
                                 <input type="text" name="vr_iam_apikey" placeholder="iam_apikey" required>
                                 <div class="toneanalyzer-area optional">
+                                    <br>
                                     <label style="display: inline-block; width: 99%;">Credentials - Tone Analyzer</label>
                                     <div class="slider-area">
                                         <label class="switch">

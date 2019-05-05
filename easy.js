@@ -1,5 +1,4 @@
 var fs = require("fs"); //filesystem
-var opn = require('opn');
 var express = require("express");
 var bodyParser = require("body-parser");
 const voices = {
@@ -16,6 +15,7 @@ const voices = {
 
 
 function initRestAPI() {
+  creatyCopyOfConfig();
   var restAPI = express();
   restAPI.use(bodyParser.urlencoded({ extended: true }));
   restAPI.use(bodyParser.json());
@@ -23,18 +23,33 @@ function initRestAPI() {
   var port = 80;
   var router = express.Router();
 
-  router.post('/cred', function(request, response){
+  function sendState(x) {
+    router.get('/cred', function(request, response) {
+      var stateMsg;
+      if(x) {
+        stateMsg = "TJBot is ready."
+        response.send(stateMsg);  
+      } else {
+        stateMsg = "Something went wrong."
+        response.send(stateMsg);  
+      } 
+    });
+  }
+
+  var x = router.post('/cred', function(request, response) {
     console.log(request.body);
     getCredentials(request.body);
-    getConfig(request.body);
+    var stateOfConfiguration = getConfig(request.body);
+    sendState(stateOfConfiguration);
   });
+
 
   restAPI.use('/rest', router);
   restAPI.use(express.static(__dirname + '/public'));
 
   restAPI.listen(port);
   console.log('RestAPI is active on port ' + port);
-  opn('http://localhost/index.html');
+  console.log('Configuration is running.');
 }
 
 function getCredentials(message) {
@@ -88,7 +103,7 @@ function getConfig(message) {
 
   const newLocal = JSON.stringify(configInfo, null);
   var stream = fs.createWriteStream(__dirname + '/configuration/configInfo.js');
-  stream.once('open', function(fd) {
+  const startConfiguration = stream.once('open', function(fd) {
     if (fd) {
       stream.write(`let configInfo = ${newLocal}; \n`);
       stream.write(`configInfo = JSON.stringify(configInfo, null); \n`);
@@ -96,12 +111,26 @@ function getConfig(message) {
       stream.write(`exports.configInfo = configInfo; \n`);
       stream.end();
       console.log("Information for config file stored successfully.");
+      return true
     } else {
       console.log("Something went wrong.");
+      return false
     }
   });
 
+  if (startConfiguration) {
+    return true
+  } else {
+    return false
+  }
 }
+ 
+function creatyCopyOfConfig() {
+  fs.copyFile('./configuration/config.default.js', './configuration/config.js', (err) => {  
+      if (err) throw err;  
+      console.log('config.default.js was copied to config.js');  
+  }); 
+} 
 
 
 //VISUAL RECOGNITION

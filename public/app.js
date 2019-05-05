@@ -87,7 +87,6 @@ toggleBtns.forEach( toggleBtn => {
 langCards.forEach( (langCard , index) => {
   langCard.onclick = () => {
     langCard.children[0].children[2].checked = true;
-    console.log("First:" + index);
     deleteAllcolor(index);
     langCard.style.color = "#7f6000";
     if (frInput.checked == true) {
@@ -115,12 +114,26 @@ langCards.forEach( (langCard , index) => {
 })
 
 submitBtn.onclick = () => {
-  counter++ ;
-  showOrHiddeSuccessMsg(counter);
+  setTimeout(() => {
+    var xhttp = new XMLHttpRequest();
+    var url = window.location.protocol+ "//" + window.location.host + "/rest/cred";
+    xhttp.onload = function () {
+      if(this.status === 200) {
+        var responseMsg = this.responseText;
+        console.log(responseMsg);
+        if (responseMsg == "TJBot is ready."){
+          counter++ ;
+          showOrHiddeSuccessMsg(counter);
+        }
+      }
+    }
+    xhttp.open("GET", url, true);
+    xhttp.send();
+  }, 20)
 }
 
 successMsg.onclick = () => {
-  counter++ ;
+  counter++;
   showOrHiddeSuccessMsg(counter);
 }
 

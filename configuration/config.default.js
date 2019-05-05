@@ -1,29 +1,31 @@
 //Default configuration of TJBot CZ
 //!!!be careful with the configration of speakerDeviceId!!!
+//run easy.js to configure or setup yourself
+var confInfo = require("./configInfo");
 exports.tjConfig = {
-	log: {
+        log: {
         level: 'info' // valid levels are 'error', 'warn', 'info', 'verbose', 'debug', 'silly'
     },
     robot: {
-        gender: 'male', // ['male', 'female']
-        name: 'Michael'
+        gender: confInfo.configInfo.gender, // ['male', 'female']
+        name: confInfo.configInfo.tjname
     },
     listen: {
-        microphoneDeviceId: "plughw:1,0", // plugged-in USB card 1, device 0; see `arecord -l` for a list of recording devices
-        inactivityTimeout: -1, // -1 to never timeout or break the connection. Set this to a value in seconds e.g 120 to end connection after 120 seconds of silence
-        language: 'en-US', // see TJBot.prototype.languages.listen
+        microphoneDeviceId: "plughw:1,0", // plugged-in USB card 1, device 0; see `arecord -l` for a list of recording devic$
+        inactivityTimeout: -1, // -1 to never timeout or break the connection. Set this to a value in seconds e.g 120 to end$
+        language: confInfo.configInfo.language_stt, // see TJBot.prototype.languages.listen
         customization_id: '' //customization model id for STT
     },
     wave: {
         servoPin: 7 // corresponds to BCM 7 / physical PIN 26
     },
     speak: {
-        language: 'en-US', // see TJBot.prototype.languages.speak
-        voice: undefined, // use a specific voice; if undefined, a voice is chosen based on robot.gender and speak.language
+        language: confInfo.configInfo.language_tts, // see TJBot.prototype.languages.speak
+        voice: confInfo.configInfo.voice, // use a specific voice; if undefined, a voice is chosen based on robot.gender and$
                           // english voices: en-US_MichaelVoice, en-US_AllisonVoice, en-US_LisaVoice, en-GB_KateVoice
         speakerDeviceId: "plughw:0,0" // plugged-in USB card 1, device 0; `see aplay -l` for a list of playback devices
-        //speakerDeviceId: "bluealsa:HCI=hci0,DEV=XX:XX:XX:XX:XX:XX,PROFILE=a2dp" // bluetooth speaker, set mac adress from "cat ~/.asoundrc" device
-	
+        //speakerDeviceId: "bluealsa:HCI=hci0,DEV=XX:XX:XX:XX:XX:XX,PROFILE=a2dp" // bluetooth speaker, set mac adress from $
+
     },
     see: {
         confidenceThreshold: {
@@ -61,3 +63,5 @@ exports.paths = {
 		take_a_picture: __dirname + '/../media/music/take_a_picture.mp3'
 	}
 }
+
+

@@ -330,3 +330,6 @@ input:checked + .slider:before {
   transition: 0.5s all ease;
 }
 
+.credentials {
+  margin-top: -3rem;
+}
