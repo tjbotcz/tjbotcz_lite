@@ -106,40 +106,18 @@ function listen() {
       processConversation(msgNoName, function (response) {
         //read response text from the service
         if (response.description) {
-          var newResponse = response.description;
-          if(response.description.includes("robot.name")){
-            var b = newResponse.slice(-13, -1);
-            var n = newResponse.indexOf("robot.name");
-            if (n == 0) {
-              var end = newResponse.slice(10, -1);
-              newResponse = tj.configuration.robot.name + " " + end;
-              converse(newResponse, response);
-            } else if (b.includes("robot.name")) {
-              var beginning = newResponse.slice(0, n);
-              newResponse = beginning + " " + tj.configuration.robot.name
-              converse(newResponse, response);
-            } else {
-              var beginning = newResponse.slice(0, n);
-              var end = newResponse.slice((n+10), -1);
-              newResponse = beginning + " " + tj.configuration.robot.name + " " + end;
-              converse(newResponse, response);
+          tj.speak(response.description).then(function () {
+            if (response.object.context.hasOwnProperty('action')) {
+              var cmdType = response.object.context.action.cmdType;
+              var cmdPayload;
+              if (response.object.context.action.hasOwnProperty('cmdPayload')) {
+                cmdPayload = response.object.context.action.cmdPayload;
+              }
+              processAction(cmdType, cmdPayload);
             }
-          }
+          });
         }
       });
-    }
-  });
-}
-
-function converse(text, response) {
-  tj.speak(text).then(function () {
-    if (response.object.context.hasOwnProperty('action')) {
-      var cmdType = response.object.context.action.cmdType;
-      var cmdPayload;
-      if (response.object.context.action.hasOwnProperty('cmdPayload')) {
-        cmdPayload = response.object.context.action.cmdPayload;
-      }
-      processAction(cmdType, cmdPayload);
     }
   });
 }
