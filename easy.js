@@ -129,6 +129,7 @@ function creatyCopyOfConfig() {
   fs.copyFile('./configuration/config.default.js', './configuration/config.js', (err) => {  
       if (err) throw err;  
       console.log('config.default.js was copied to config.js');  
+      console.log('WE ARE DONE. YOUR CONFIGURATION PAGE IS READY. OPEN BROWSER AND ENTER TJBOT IP ADDRESS.'); 
   }); 
 } 
 
