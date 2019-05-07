@@ -368,3 +368,7 @@ input:checked + .slider:before {
 .credentials {
   margin-top: -3rem;
 }
+
+.container .form-area form .credentials input {
+  font-size: 12px;
+}

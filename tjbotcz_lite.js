@@ -124,6 +124,8 @@ function listen() {
               newResponse = beginning + " " + tj.configuration.robot.name + " " + end;
               converse(newResponse, response);
             }
+          } else {
+            converse(newResponse, response);
           }
         }
       });

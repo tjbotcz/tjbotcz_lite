@@ -94,7 +94,7 @@ function getConfig(message) {
   let voice = voiceLanguage[`${message.gender}`];
 
   var configInfo = {
-                    "tjname": message.tjname, 
+                    "tjname": capitalizeFirstLetter(message.tjname), 
                     "gender": message.gender,
                     "language_tts": message.language_speak,
                     "language_stt": message.language_hear, 
@@ -131,6 +131,10 @@ function creatyCopyOfConfig() {
       console.log('config.default.js was copied to config.js');  
   }); 
 } 
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 
 //VISUAL RECOGNITION
