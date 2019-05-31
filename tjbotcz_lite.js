@@ -114,14 +114,10 @@ function listen() {
                 cmdPayload = response.object.context.action.cmdPayload;
               }
               processAction(cmdType, cmdPayload);
-            }
-<<<<<<< HEAD
-          } else {
+            } else {
             converse(newResponse, response);
           }
-=======
           });
->>>>>>> 3e07739738bc29954a7188625430b8bfbe9fc414
         }
       });
     }
