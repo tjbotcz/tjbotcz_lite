@@ -168,7 +168,6 @@ code {
 
 .container .form-area form .language-area {
   width: 100%;
-  overflow: scroll;
   transition: 0.5s width ease;
   cursor: pointer;
 }
