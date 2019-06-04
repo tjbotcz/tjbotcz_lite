@@ -133,6 +133,19 @@ function listen() {
   });
 }
 
+function converse(text, response) {
+  tj.speak(text).then(function () {
+    if (response.object.context.hasOwnProperty('action')) {
+      var cmdType = response.object.context.action.cmdType;
+      var cmdPayload;
+      if (response.object.context.action.hasOwnProperty('cmdPayload')) {
+        cmdPayload = response.object.context.action.cmdPayload;
+      }
+      processAction(cmdType, cmdPayload);
+    }
+  });
+}
+
 /**
  * Stop listening
  */
