@@ -69,14 +69,14 @@ function getCredentials(message) {
       stream.write(`exports.credentials.visual_recognition = {iam_apikey: '${message.vr_iam_apikey}'}; \n`);
       if (message.ta_iam_apikey) {
         stream.write("\n //Watson Tone Analyzer \n // https://www.ibm.com/watson/services/tone-analyzer \n");
-        stream.write(`exports.credentials.tone_analyzer = {iam_apikey: '${message.ta_iam_apikey}', url: '${message.ta_url}'} \n`);
+        stream.write(`exports.credentials.tone_analyzer = {iam_apikey: '${message.ta_iam_apikey}', url: '${message.ta_url}'}; \n`);
       } else {
         stream.write("\n /* \n //Watson Tone Analyzer \n // https://www.ibm.com/watson/services/tone-analyzer \n");
         stream.write(`exports.credentials.tone_analyzer = {iam_apikey: '', url: ''} \n */ \n`);
       }
       if (message.lt_iam_apikey) {
         stream.write("\n //Watson Language Translator \n // https://www.ibm.com/watson/services/language-translator \n");
-        stream.write(`exports.credentials.language_translator = {iam_apikey: '${message.lt_iam_apikey}', \n url: '${message.lt_url}'} \n`);
+        stream.write(`exports.credentials.language_translator = {iam_apikey: '${message.lt_iam_apikey}', \n url: '${message.lt_url}'}; \n`);
       } else {
         stream.write("\n /* \n //Watson Language Translator \n // https://www.ibm.com/watson/services/language-translator \n");
         stream.write(`exports.credentials.language_translator = {iam_apikey: '', url: ''} \n */ \n`);
