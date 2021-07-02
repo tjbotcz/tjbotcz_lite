@@ -26,6 +26,9 @@ var tj = new TJBot(hardware, tjConfig, credentials);
 var contextBackup; // last conversation context backup
 var ctx = {}; // our internal context object
 
+
+var sessionId; //conversation session
+
 //---------------------------------------------------------------------
 // Functions
 //---------------------------------------------------------------------
@@ -51,41 +54,43 @@ function take_a_photo() {
 
 /**
  * CLASSIFY PHOTO
- */
-function classify_photo() {
-  tj.recognizeObjectsInPhoto(_paths.picture.orig).then(function (objects) {
-    console.log(JSON.stringify(objects, null, 2));
+*/
 
-    photoClassificationToText(objects, function (text) {
-      tj.speak(text);
-    });
-  });
+async function classify_photo() {
+  try {
+    const response = await tj.recognizeObjectsInPhoto(_paths.picture.orig, credentials.visual_recognition);
+    //console.log(response.body);
+    const text = await photoClassificationToText(response.body);
+    tj.speak('I think I can recognize these objects:' + text);
+  } catch(error) {
+    console.log(error);
+  }
 }
+
+
 
 /**
  * helper for classify_photo() which returns only objects in picture with score > 0.5 and max 5 classes
  * @param objects - list of objects
  */
-function photoClassificationToText(objects, callback) {
-  var text = "";
-  var numOfClasses = 0;
-  var maxNumOfClasses = 5;
-  objects.sort(function (a, b) { return b.score - a.score; });
-  for (var j = 0; j < objects.length; j++) {
-    if (objects[j].score >= 0.5) {
-      if (numOfClasses) text = text + ',';
-      text = text + " " + objects[j].class;
-      numOfClasses++;
-      if (numOfClasses >= maxNumOfClasses) break;
-    }
+function photoClassificationToText(objects) {
+  var jsonObj = JSON.parse(objects);
+  console.log( Object.keys(jsonObj.result.tags).length);
+  var foundObjects ='';
+  var numberObjects = 0;
+  for(var i = 0;i < Object.keys(jsonObj.result.tags).length;i++) {
+      if (jsonObj.result.tags[i].confidence >= 0.4) {
+          if (numberObjects < 5){
+              foundObjects = foundObjects + ', ' + jsonObj.result.tags[i].tag.en;
+              numberObjects = numberObjects + 1;
+          } else {
+              break;
+          }
+      }
+  }
 
-  }
-  if (text != "") {
-    text = "I think I can see: " + text + ".";
-  } else {
-    text = "I can't recognize what is in the picture.";
-  }
-  callback(text);
+  console.log(foundObjects);
+  return(foundObjects);
 }
 
 //CONVERSATION
@@ -95,6 +100,12 @@ function photoClassificationToText(objects, callback) {
  * LISTEN
  */
 function listen() {
+
+  tj.sessionId(confCred.assId, function(response){
+    sessionId = response;
+    console.log('Conversation session ID is:' , sessionId);
+  });
+
   tj.speak("Hello, my name is " + tj.configuration.robot.name + ". I am listening...");
 
   tj.listen(function (msg) {
@@ -104,6 +115,7 @@ function listen() {
       var msgNoName = msg.toLowerCase().replace(tj.configuration.robot.name.toLowerCase(), "");
 
       processConversation(msgNoName, function (response) {
+        //console.log(JSON.stringify(response));
         //read response text from the service
         if (response.description) {
           var newResponse = response.description;
@@ -135,14 +147,19 @@ function listen() {
 
 function converse(text, response) {
   tj.speak(text).then(function () {
-    if (response.object.context.hasOwnProperty('action')) {
-      var cmdType = response.object.context.action.cmdType;
-      var cmdPayload;
-      if (response.object.context.action.hasOwnProperty('cmdPayload')) {
-        cmdPayload = response.object.context.action.cmdPayload;
+    if (response.object.context.skills['main skill'].hasOwnProperty('user_defined')){
+      if (response.object.context.skills['main skill'].user_defined.hasOwnProperty('action')) {
+        var cmdType = response.object.context.skills['main skill'].user_defined.action.cmdType;
+        var cmdPayload;
+        if (response.object.context.skills['main skill'].user_defined.action.hasOwnProperty('cmdPayload')) {
+          cmdPayload = response.object.context.skills['main skill'].user_defined.action.cmdPayload;
+        }
+        console.log(cmdType, cmdPayload);
+        processAction(cmdType, cmdPayload);
       }
-      processAction(cmdType, cmdPayload);
+
     }
+
   });
 }
 
@@ -162,15 +179,22 @@ function stopListening() {
  * @param inTextMessage - text
  */
 function processConversation(inTextMessage, callback) {
-  if(contextBackup == null) contextBackup = ctx;
-  if(contextBackup.hasOwnProperty('action')) delete contextBackup.action;
-  if(contextBackup.hasOwnProperty('yes_photo')) delete contextBackup.yes_photo;
-  // Object.assign(contextBackup, ctx);
+  if(contextBackup == null) {
+    contextBackup = ctx;
+    console.log(contextBackup);
 
+  } else if(contextBackup.skills['main skill'].hasOwnProperty('user_defined')){
+    console.log('nasel jsem user_defined');
+    if(contextBackup.skills['main skill'].user_defined.hasOwnProperty('action')) delete contextBackup.skills['main skill'].user_defined.action;
+    if(contextBackup.skills['main skill'].user_defined.hasOwnProperty('yes_photo')) delete contextBackup.skills['main skill'].user_defined.yes_photo;
+    console.log(contextBackup);
+  }
+  // Object.assign(contextBackup, ctx);
   // send to the conversation service
-  tj.converse(confCred.conversationWorkspaceId, inTextMessage, contextBackup, function (response) {
+  tj.converse(confCred.assId, sessionId, inTextMessage, contextBackup, function (response) {
     console.log(JSON.stringify(response, null, 2));
-    contextBackup = response.object.context;
+    contextBackup = response.object.context //.skills['main skill'].user_defined;
+    console.log("CONTEXT: " + JSON.stringify(contextBackup));
     callback(response);
   });
 }
@@ -277,11 +301,29 @@ function wave_arm(position) {
 //RESET TJBOT
 //---------------------------------------------------------------------
 function resetTJBot() {
+  
   tj.raiseArm();
   led_turn_off_all();
   tj.stopListening();
   listen();
+
+
+/*
+  tj.wave();
+  tj.changeColorRGBLed("red", function(response){
+    console.log(response);
+  });
+  tj.speak("What are hybrid cloud and A. I. solutions?");
+
+  setTimeout(offLED,4000);
+  */
 }
+
+function offLED(){
+  tj.turnOffRGBLed()
+  
+}
+
 
 
 //CALL INIT
