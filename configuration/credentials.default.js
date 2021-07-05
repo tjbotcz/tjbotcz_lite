@@ -6,7 +6,7 @@
 *   Your password is the smaller value: 12 characters
 */
 
-exports.conversationWorkspaceId = ''; // replace with the workspace identifier of your conversation
+exports.assId = ''; // replace with the workspace identifier of your conversation
 
 // Create the credentials object for export
 exports.credentials = {};
@@ -44,7 +44,8 @@ exports.credentials.text_to_speech = {
 // https://www.ibm.com/watson/services/visual-recognition
 exports.credentials.visual_recognition = {
 	//api_key: '', //for older service instances created before May 23, 2018 
-	iam_apikey: ''
+	iam_apikey: '',
+	apiSecret: ''
 };
 
 /* 
