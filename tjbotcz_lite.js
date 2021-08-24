@@ -3,7 +3,6 @@ var TJBot = require("tjbotczlib");
 var conf = require("./configuration/config"); //tjConfig & local czech enhancements
 var confCred = require("./configuration/credentials"); //credentials only
 var fs = require("fs"); //filesystem
-const await = require('asyncawait/await');
 
 //Pigpio library for LED (simple version)
 var gpio = require("pigpio").Gpio;
