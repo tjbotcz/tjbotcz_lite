@@ -7,19 +7,24 @@
     "email": "tjbotcz@gmail.com"
   },
   "dependencies": {
-    "lcdi2c": "~1.0.6",
+    "body-parser": "~1.0.1",
     "espeak": "~0.0.3",
+    "express": "~4.0.0",
+    "got": "^11.8.2",
+    "ibm-cloud-sdk-core": "^1.1.0",
+    "ibm-watson": "^6.1.1",
     "ip": "~1.1.5",
     "is-running": "~2.1.0",
-    "body-parser": "~1.0.1",
-    "express": "~4.0.0",
-    "open":"~6.2.0",
-    "tjbotczlib": "latest"
+    "lcdi2c": "~1.0.6",
+    "open": "~6.2.0",
+    "tjbotczlib": "latest",
+    "watson-developer-cloud": "^4.0.1"
   },
   "main": "tjbotcz_lite.js",
   "homepage": "https://github.com/tjbotcz/tjbotcz_lite",
   "keywords": [
-    "tjbotcz", "tjbot"
+    "tjbotcz",
+    "tjbot"
   ],
   "license": "Apache-2.0",
   "repository": {
