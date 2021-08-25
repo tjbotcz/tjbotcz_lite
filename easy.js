@@ -57,7 +57,7 @@ function getCredentials(message) {
   stream.once('open', function(fd) {
     if (fd) {
       stream.write("/* \n * User-specific configuration \n * IMPORTANT NOTES: \n *   Please ensure you do not interchange your username and password. \n *   Your username is the longer value: 36 digits, including hyphens \n *   Your password is the smaller value: 12 characters \n */ \n ")
-      stream.write(`\n exports.conversationWorkspaceId = '${message.wa_workspaceID}'; // replace with the workspace identifier of your conversation \n`);
+      stream.write(`\n exports.assId = '${message.wa_workspaceID}'; // replace with the workspace identifier of your conversation \n`);
       stream.write(`// Create the credentials object for export \n exports.credentials = {}; \n`);
       stream.write("\n //Watson Assistant \n // https://www.ibm.com/watson/ai-assistant/ \n" );
       stream.write(`exports.credentials.assistant = {iam_apikey: '${message.wa_iam_apikey}', url: '${message.wa_url}'}; \n`);
