@@ -65,8 +65,8 @@ function getCredentials(message) {
       stream.write(`exports.credentials.speech_to_text = {iam_apikey: '${message.stt_iam_apikey}', url: '${message.stt_url}'}; \n`);
       stream.write("\n //Watson Text to Speech \n //For older instances use password/usrername fields instead of iam_apikey \n // https://www.ibm.com/watson/services/text-to-speech \n");
       stream.write(`exports.credentials.text_to_speech = {iam_apikey: '${message.tts_iam_apikey}', url: '${message.tts_url}'}; \n`);
-      stream.write("\n //Watson Visual Recognition \n // https://www.ibm.com/watson/services/visual-recognition \n");
-      stream.write(`exports.credentials.visual_recognition = {iam_apikey: '${message.vr_iam_apikey}'}; \n`);
+      stream.write("\n //Watson Visual Recognition \n // https://imagga.com \n");
+      stream.write(`exports.credentials.visual_recognition = {iam_apikey: '${message.vr_iam_apikey}', apiSecret: '${message.vr_apisecret}'}; \n`);
       if (message.ta_iam_apikey) {
         stream.write("\n //Watson Tone Analyzer \n // https://www.ibm.com/watson/services/tone-analyzer \n");
         stream.write(`exports.credentials.tone_analyzer = {iam_apikey: '${message.ta_iam_apikey}', url: '${message.ta_url}'}; \n`);
