@@ -101,11 +101,12 @@ function photoClassificationToText(objects) {
  */
 function listen() {
 
-  tj.sessionId(confCred.assId, function(response){
-    sessionId = response;
-    console.log('Conversation session ID is:' , sessionId);
-  });
-
+  tj.sessionId(confCred.assId).then ((value) => {
+    console.log('Conversation session ID is: ' + value);
+  })
+  
+  
+  
   tj.speak("Hello, my name is " + tj.configuration.robot.name + ". I am listening...");
 
   tj.listen(function (msg) {
@@ -113,6 +114,7 @@ function listen() {
     if (msg.indexOf(tj.configuration.robot.name) > -1) { //robot's name is in the text
       // remove our name from the message
       var msgNoName = msg.toLowerCase().replace(tj.configuration.robot.name.toLowerCase(), "");
+      console.log("ZASLECHL JSEM MICHAEL");
 
       processConversation(msgNoName, function (response) {
         //console.log(JSON.stringify(response));
@@ -191,11 +193,12 @@ function processConversation(inTextMessage, callback) {
   }
   // Object.assign(contextBackup, ctx);
   // send to the conversation service
-  tj.converse(confCred.assId, sessionId, inTextMessage, contextBackup, function (response) {
+  tj.converse(confCred.assId, sessionId, inTextMessage, contextBackup).then((response) => {
     console.log(JSON.stringify(response, null, 2));
     contextBackup = response.object.context //.skills['main skill'].user_defined;
     console.log("CONTEXT: " + JSON.stringify(contextBackup));
     callback(response);
+
   });
 }
 
