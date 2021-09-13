@@ -18,7 +18,10 @@
     "open": "~6.2.0",
     "tjbotczlib": "latest",
     "watson-developer-cloud": "^4.0.1",
-    "asyncawait": "^3.0.0"
+    "asyncawait": "^3.0.0",
+    "pigpio": "^3.2.3",
+    "rpi-ws281x-native": "^0.10.1",
+    "sleep": "^6.3.0"
   },
   "main": "tjbotcz_lite.js",
   "homepage": "https://github.com/tjbotcz/tjbotcz_lite",
