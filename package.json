@@ -1,7 +1,7 @@
 {
   "name": "tjbotcz_lite",
   "description": "Lite version of Czech TJBot with conversation, visual recognition, and simple RGB diode",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "author": {
     "name": "tjbotcz",
     "email": "tjbotcz@gmail.com"
