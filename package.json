@@ -1,7 +1,7 @@
 {
   "name": "tjbotcz_lite",
   "description": "Lite version of Czech TJBot with conversation, visual recognition, and simple RGB diode",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": {
     "name": "tjbotcz",
     "email": "tjbotcz@gmail.com"
@@ -18,7 +18,8 @@
     "lcdi2c": "~1.0.6",
     "open": "~6.2.0",
     "tjbotczlib": "latest",
-    "watson-developer-cloud": "^4.0.1"
+    "watson-developer-cloud": "^4.0.1",
+    "asyncawait": "^3.0.0"
   },
   "main": "tjbotcz_lite.js",
   "homepage": "https://github.com/tjbotcz/tjbotcz_lite",
