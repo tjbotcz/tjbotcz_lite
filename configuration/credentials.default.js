@@ -14,8 +14,6 @@ exports.credentials = {};
 // Watson Assistant
 // https://www.ibm.com/watson/ai-assistant/
 exports.credentials.assistant = {
-	//password: '',
-	//username: ''
 	iam_apikey: '',
 	url: ''
 };
@@ -40,10 +38,9 @@ exports.credentials.text_to_speech = {
 	url: ''
 };
 
-// Watson Visual Recognition
-// https://www.ibm.com/watson/services/visual-recognition
+// Imagga Visual Recognition
+// https://imagga.com/
 exports.credentials.visual_recognition = {
-	//api_key: '', //for older service instances created before May 23, 2018 
 	iam_apikey: '',
 	apiSecret: ''
 };
