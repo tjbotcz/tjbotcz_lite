@@ -15,7 +15,6 @@
     "ibm-watson": "^6.1.1",
     "ip": "~1.1.5",
     "is-running": "~2.1.0",
-    "lcdi2c": "~1.0.6",
     "open": "~6.2.0",
     "tjbotczlib": "latest",
     "watson-developer-cloud": "^4.0.1",
